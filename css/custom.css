@@ -1,0 +1,48 @@
+/* {
+  border-style: solid;
+  border-width: 1px;
+  border-color: red;
+}*/
+
+body {
+  padding-top: 50px;
+  height: 100%;
+  padding-bottom: 30px;
+}
+html {
+  height: 100%;
+}
+body {
+  height: 100%;
+}
+
+/*Bootstrap mod*/
+
+.navbar {
+  margin-bottom: 0px !important;
+}
+.container-fluid {
+  height: 100%;
+}
+.forgmap {
+  height: 100%;
+}
+.col-md-8 {
+  height: 100%;
+}
+.col-md-4 {
+  height: 100%;
+}
+
+/*Own part */
+
+.noleftrightpad {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.navbgcolor {
+  background-color: #222;
+}
+#map {
+  height: 100%;
+}
