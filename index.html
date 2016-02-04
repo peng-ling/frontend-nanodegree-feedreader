@@ -20,42 +20,45 @@
   </style>
   <script src="js/jquery.js"></script>
   <script src="js/knockout.js"></script>
-  <script src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=initMap">
+  <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=initMap">-->
   </script>
 
 </head>
 
 <body>
-  <nav class="navbar navbar-inverse navbar-fixed-top">
+
+  <nav class="navbar navbar-default">
     <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Pauls Map</a>
+        <a class="navbar-brand">Pauls Map</a>
       </div>
     </div>
+    <!-- /.container-fluid -->
   </nav>
-  <div class="container-fluid noleftrightpad" role="main">
-    <!--row for the textinput filter-->
-    <div class="row">
-      <div class="col-md-4 navbgcolor">.col-md-4</div>
-      <div class="col-md-8 navbgcolor">.col-md-8</div>
-    </div>
-    <!--row for the filter results / map filter-->
-    <div class="row forgmap">
-      <div class="col-md-4 forgmap navbgcolor">.col-md-4</div>
-      <div class="col-md-8 forgmap noleftrightpad">
-        <div id="map"></div>
+
+  <div class="container-fluid gmap">
+    <div class="row gmap">
+      <div class="col-md-4">
+        <div class="input-group">
+          <input id="input" type="text" class="form-control" placeholder="Search for..."></input>
+          <span class="input-group-btn">
+        <button class="btn btn-default" type="button" data-bind="click: function() { filter(document.getElementById('input').value) }">Go!</button>
+      </span>
+        </div>
+        <dl data-bind="foreach: filterLocations">
+          <dd data-bind="text: Name">a</dd>
+        </dl>
+      </div>
+      <div class="col-md-8 gmap">
+        <div class="gmap" id="map">
+        </div>
       </div>
     </div>
   </div>
-  </div>
-
-
-
-  <script src="js/main.js"></script>
-
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="js/ie10-viewport-bug-workaround.js"></script>
+  <script src="js/main.js"></script>
 </body>
 
 </html>
