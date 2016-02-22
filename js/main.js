@@ -1,43 +1,61 @@
-function locationsViewModel() {
+var places = [{
+  name: "Ristorante Pizzeria Da Balbi",
+  lat: 50.0716683,
+  lng: 8.2309231,
+  description: "great italian food",
+  /*icon: '',*/
+  visible: true
+}, {
+  name: "Restaurant Mykonos",
+  lat: 50.0716683,
+  lng: 8.2309231,
+  description: "great greek food",
+  /*icon: '',*/
+  visible: true
+}];
+
+var locationsViewModel = function() {
+
   var self = this;
 
-  self.locations = ko.observableArray([{
-    Name: 'Bert'
-  }, {
-    Name: 'Charles'
-  }, {
-    Name: 'Denise'
-  }]);
+  self.Locations = ko.observableArray(places);
 
-  //http://stackoverflow.com/questions/20857594/knockout-filtering-on-observable-array
-  self.currentFilter = ko.observable();
+  self.filter = ko.observable('');
 
+  //
+  //filter the items using the filter text
   self.filterLocations = ko.computed(function() {
-    if (!self.currentFilter()) {
-      return self.locations();
+    var filter = self.filter().toLowerCase();
+    if (!filter || filter === ' ') {
+      return self.Locations();
+      console.console.log('gashjdgashdg');
     } else {
-      return ko.utils.arrayFilter(self.locations(), function(locations) {
-        return locations.Name == self.currentFilter();
+      return self.Locations().filter(function(item) {
+        return RegExp(filter).test(item.name.toLowerCase());
       });
-    }
+    };
   });
+};
 
-  self.filter = function(Name) {
-    self.currentFilter(Name);
-  }
-
-}
-
-ko.applyBindings(new locationsViewModel);
+ko.applyBindings(new locationsViewModel());
 
 function initMap() {
+
+  var myLatLng = {
+    lat: 50.0716683,
+    lng: 8.2309231
+  };
+
   // Create a map object and specify the DOM element for display.
   var map = new google.maps.Map(document.getElementById('map'), {
-    center: {
-      lat: -34.397,
-      lng: 150.644
-    },
+    center: myLatLng,
     scrollwheel: false,
     zoom: 8
+  });
+
+  var marker = new google.maps.Marker({
+    position: myLatLng,
+    map: map,
+    title: 'Hello World!'
   });
 }

@@ -20,7 +20,7 @@
   </style>
   <script src="js/jquery.js"></script>
   <script src="js/knockout.js"></script>
-  <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=initMap">-->
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=initMap">
   </script>
 
 </head>
@@ -41,14 +41,13 @@
     <div class="row gmap">
       <div class="col-md-4">
         <div class="input-group">
-          <input id="input" type="text" class="form-control" placeholder="Search for..."></input>
-          <span class="input-group-btn">
-        <button class="btn btn-default" type="button" data-bind="click: function() { filter(document.getElementById('input').value) }">Go!</button>
-      </span>
+          <input data-bind="value: filter, valueUpdate: 'afterkeydown'" id="input" type="text" class="form-control" placeholder="Search for..."></input>
         </div>
-        <dl data-bind="foreach: filterLocations">
-          <dd data-bind="text: Name">a</dd>
-        </dl>
+        <ul data-bind="foreach: filterLocations">
+          <li>
+            <a href="#" data-bind="text: $data.name, click: $parent.setPlace"></a>
+          </li>
+        </ul>
       </div>
       <div class="col-md-8 gmap">
         <div class="gmap" id="map">
