@@ -5,15 +5,13 @@ var initMap = function() {
     lat: 50.0716683,
     lng: 8.2309231
   };
-  //https://addyosmani.com/resources/essentialjsdesignpatterns/book/#mixinpatternjavascript
-  // Create a map object and specify the DOM element for display.
+
   var map = new google.maps.Map(document.getElementById('map'), {
     center: myLatLng,
     scrollwheel: false,
     zoom: 8
   });
 
-  // wait for loaded and add markers
   google.maps.event.addListener(map, 'idle', function() {
     console.log('LOADED');
   });
@@ -23,20 +21,8 @@ var initMap = function() {
     map: map,
     title: 'Hello World!'
   });
-  return this;
 };
 //google maps end
-
-var xxx = function() {
-  this.yyy = 'yyy';
-  initMap.call(this);
-};
-
-xxx.prototype = Object.create(initMap.prototype);
-
-var fireMap = function() {
-  return fff = new xxx();
-};
 
 var places = [{
   name: "Ristorante Pizzeria Da Balbi",
