@@ -1,3 +1,15 @@
+var map;
+
+var callbackGM = function() {
+
+  if (typeof google == 'undefined') {
+    nm('error');
+  } else {
+    initMap();
+    nm('ok');
+  };
+};
+
 //google maps start
 var initMap = function() {
 
@@ -6,14 +18,10 @@ var initMap = function() {
     lng: 8.2309231
   };
 
-  var map = new google.maps.Map(document.getElementById('map'), {
+  map = new google.maps.Map(document.getElementById('map'), {
     center: myLatLng,
     scrollwheel: false,
     zoom: 8
-  });
-
-  google.maps.event.addListener(map, 'idle', function() {
-    console.log('LOADED');
   });
 
   var marker = new google.maps.Marker({
@@ -24,40 +32,57 @@ var initMap = function() {
 };
 //google maps end
 
-var places = [{
-  name: "Ristorante Pizzeria Da Balbi",
-  lat: 50.0716683,
-  lng: 8.2309231,
-  description: "great italian food",
-  /*icon: '',*/
-  visible: true
-}, {
-  name: "Restaurant Mykonos",
-  lat: 50.0716683,
-  lng: 8.2309231,
-  description: "great greek food",
-  /*icon: '',*/
-  visible: true
-}];
+var nm = function(state) {
 
-var locationsViewModel = function() {
+  this.state = state;
 
-  var self = this;
+  var myLatLng1 = {
+    lat: 50.1716984,
+    lng: 8.2309231
+  };
 
-  self.Locations = ko.observableArray(places);
-
-  self.filter = ko.observable('');
-
-  self.filterLocations = ko.computed(function() {
-    var filter = self.filter().toLowerCase();
-    if (!filter || filter === '') {
-      return self.Locations();
-    } else {
-      return self.Locations().filter(function(item) {
-        return RegExp(filter).test(item.name.toLowerCase());
-      });
-    };
+  var marker1 = new google.maps.Marker({
+    position: myLatLng1,
+    map: map,
+    title: 'Hello World!'
   });
-};
 
-ko.applyBindings(new locationsViewModel());
+  var places = [{
+    name: "Ristorante Pizzeria Da Balbi",
+    lat: 50.0716683,
+    lng: 8.2309231,
+    description: "great italian food",
+    /*icon: '',*/
+    visible: true
+  }, {
+    name: "Restaurant Mykonos",
+    lat: 50.0716683,
+    lng: 8.2309231,
+    description: "great greek food",
+    /*icon: '',*/
+    visible: true
+  }];
+
+  var locationsViewModel = function() {
+
+    var self = this;
+
+    self.Locations = ko.observableArray(places);
+
+    self.filter = ko.observable('');
+
+    self.filterLocations = ko.computed(function() {
+      var filter = self.filter().toLowerCase();
+      if (!filter || filter === '') {
+        return self.Locations();
+      } else {
+        return self.Locations().filter(function(item) {
+          return RegExp(filter).test(item.name.toLowerCase());
+        });
+      };
+    });
+  };
+
+  ko.applyBindings(new locationsViewModel());
+
+};
