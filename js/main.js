@@ -7,10 +7,9 @@ var callbackGM = function() {
   } else {
     initMap();
     nm('ok');
-  };
+  }
 };
 
-//google maps start
 var initMap = function() {
 
   var myLatLng = {
@@ -23,45 +22,55 @@ var initMap = function() {
     scrollwheel: false,
     zoom: 8
   });
-
-  var marker = new google.maps.Marker({
-    position: myLatLng,
-    map: map,
-    title: 'Hello World!'
-  });
 };
-//google maps end
 
 var nm = function(state) {
 
   this.state = state;
 
-  var myLatLng1 = {
-    lat: 50.1716984,
-    lng: 8.2309231
-  };
-
-  var marker1 = new google.maps.Marker({
-    position: myLatLng1,
-    map: map,
-    title: 'Hello World!'
-  });
-
   var places = [{
     name: "Ristorante Pizzeria Da Balbi",
-    lat: 50.0716683,
-    lng: 8.2309231,
+    lating: {
+      lat: 50.0720994,
+      lng: 8.2317455
+    },
     description: "great italian food",
     /*icon: '',*/
-    visible: true
+    visible: true,
+    filterstatus: ''
   }, {
     name: "Restaurant Mykonos",
-    lat: 50.0716683,
-    lng: 8.2309231,
+    lating: {
+      lat: 50.0723748,
+      lng: 8.2292886
+    },
     description: "great greek food",
     /*icon: '',*/
-    visible: true
+    visible: true,
+    filterstatus: ''
+  }, {
+    name: "Asso",
+    lating: {
+      lat: 50.0723748,
+      lng: 8.3592886
+    },
+    description: "Asso",
+    /*icon: '',*/
+    visible: true,
+    filterstatus: ''
+  }, {
+    name: "Zorro",
+    lating: {
+      lat: 50.0723748,
+      lng: 8.3592886
+    },
+    description: "Zorro",
+    /*icon: '',*/
+    visible: true,
+    filterstatus: ''
   }];
+
+  //intializing marker array
 
   var locationsViewModel = function() {
 
@@ -71,6 +80,31 @@ var nm = function(state) {
 
     self.filter = ko.observable('');
 
+    self.placesmaker = ko.observableArray([]);
+
+    places.forEach(function(item) {
+      self.placesmaker.push(new google.maps.Marker({
+        position: item.lating,
+        map: map,
+        title: item.name
+      }));
+    });
+
+    self.filteredplacesmaker = ko.computed(function() {
+      var filter = self.filter().toLowerCase();
+      if (!filter || filter === '') {
+        return self.placesmaker();
+      } else {
+        self.placesmaker().forEach(function(item) {
+          if (RegExp(filter).test(item.title.toLowerCase())) {
+            item.setVisible(true);
+          } else {
+            item.setVisible(false);
+          }
+        });
+      }
+    });
+
     self.filterLocations = ko.computed(function() {
       var filter = self.filter().toLowerCase();
       if (!filter || filter === '') {
@@ -79,8 +113,10 @@ var nm = function(state) {
         return self.Locations().filter(function(item) {
           return RegExp(filter).test(item.name.toLowerCase());
         });
-      };
+      }
     });
+
+    self.filterLocations.subscribe(function(newitem) {});
   };
 
   ko.applyBindings(new locationsViewModel());
