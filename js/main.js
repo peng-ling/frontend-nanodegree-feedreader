@@ -20,7 +20,7 @@ var initMap = function() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: myLatLng,
     scrollwheel: false,
-    zoom: 8
+    zoom: 12
   });
 };
 
@@ -52,7 +52,7 @@ var nm = function(state) {
     name: "Asso",
     lating: {
       lat: 50.0723748,
-      lng: 8.3592886
+      lng: 8.2592886
     },
     description: "Asso",
     /*icon: '',*/
@@ -62,7 +62,7 @@ var nm = function(state) {
     name: "Zorro",
     lating: {
       lat: 50.0723748,
-      lng: 8.3592886
+      lng: 8.2992886
     },
     description: "Zorro",
     /*icon: '',*/
@@ -86,7 +86,8 @@ var nm = function(state) {
       self.placesmaker.push(new google.maps.Marker({
         position: item.lating,
         map: map,
-        title: item.name
+        title: item.name,
+        label: item.name
       }));
     });
 
@@ -97,12 +98,15 @@ var nm = function(state) {
       } else {
         self.placesmaker().forEach(function(item) {
           if (RegExp(filter).test(item.title.toLowerCase())) {
+            console.log('true filter:' + filter + ' item: ' + item.title);
             item.setVisible(true);
           } else {
+            console.log('false filter:' + filter + ' item: ' + item.title);
             item.setVisible(false);
           }
         });
       }
+      console.log('------------------');
     });
 
     self.filterLocations = ko.computed(function() {
@@ -116,9 +120,28 @@ var nm = function(state) {
       }
     });
 
-    self.filterLocations.subscribe(function(newitem) {});
+    //self.filterLocations.subscribe(function(newitem) {});
   };
 
   ko.applyBindings(new locationsViewModel());
 
 };
+
+$(document).ready(function() {
+
+  $.ajaxPrefilter("json script", function(options) {
+    options.crossDomain = true;
+  });
+
+  $.ajax({
+    type: "GET",
+    url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
+    contentType: "application/json; charset=utf-8",
+    async: true,
+    dataType: "json",
+    success: function(data, textStatus, jqXHR) {
+      console.log(data);
+    },
+    error: function(errorMessage) {}
+  });
+});
