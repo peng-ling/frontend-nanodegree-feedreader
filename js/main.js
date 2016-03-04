@@ -1,4 +1,5 @@
 var map;
+var wiki;
 
 var callbackGM = function() {
 
@@ -37,7 +38,7 @@ var nm = function(state) {
     description: "great italian food",
     /*icon: '',*/
     visible: true,
-    filterstatus: ''
+    wikipageid: 26496842
   }, {
     name: "Restaurant Mykonos",
     lating: {
@@ -47,7 +48,7 @@ var nm = function(state) {
     description: "great greek food",
     /*icon: '',*/
     visible: true,
-    filterstatus: ''
+    wikipageid: 26496842
   }, {
     name: "Asso",
     lating: {
@@ -57,7 +58,7 @@ var nm = function(state) {
     description: "Asso",
     /*icon: '',*/
     visible: true,
-    filterstatus: ''
+    wikipageid: 16095
   }, {
     name: "Zorro",
     lating: {
@@ -67,7 +68,7 @@ var nm = function(state) {
     description: "Zorro",
     /*icon: '',*/
     visible: true,
-    filterstatus: ''
+    wikipageid: 16095
   }];
 
   //intializing marker array
@@ -120,7 +121,6 @@ var nm = function(state) {
       }
     });
 
-    //self.filterLocations.subscribe(function(newitem) {});
   };
 
   ko.applyBindings(new locationsViewModel());
@@ -133,15 +133,36 @@ $(document).ready(function() {
     options.crossDomain = true;
   });
 
+
+
+  $.ajaxSetup({
+    dataType: "json"
+  });
   $.ajax({
     type: "GET",
-    url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
+
+    //action=query&prop=extracts
+    url: "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=Jimi_Hendrix|Eddie_Van_Halen",
+    //url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
     contentType: "application/json; charset=utf-8",
     async: true,
-    dataType: "json",
+    dataType: "jsonp",
     success: function(data, textStatus, jqXHR) {
-      console.log(data);
+
+      self.placesmaker.forEach(function {
+
+        var infowindow = new google.maps.InfoWindow({
+          content: contentString
+        });
+
+      });
+      //wiki = data;
+      //$('#Hendrix').append(data.query.pages[16095].extract);
+      //console.log('wiki: ' + wiki)
     },
     error: function(errorMessage) {}
   });
+
+
+
 });
