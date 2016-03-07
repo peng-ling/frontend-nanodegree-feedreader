@@ -60,20 +60,20 @@ var nm = function(state) {
     visible: true,
     wikipageid: 16095
   }, {
-    name: "Zorro",
+    name: "Nerobergbahn",
     lating: {
-      lat: 50.0723748,
-      lng: 8.2992886
+      lat: 50.0946675,
+      lng: 8.2210174
     },
-    description: "Zorro",
+    description: "Nerobergbahn",
     /*icon: '',*/
     visible: true,
-    wikipageid: 16095
+    wikipageid: 9672198
   }];
 
   //intializing marker array
 
-  var locationsViewModel = function() {
+  this.locationsViewModel = function() {
 
     var self = this;
 
@@ -81,26 +81,28 @@ var nm = function(state) {
 
     self.filter = ko.observable('');
 
-    self.placesmaker = ko.observableArray([]);
+    self.placesmarker = ko.observableArray([]);
 
     places.forEach(function(item) {
-      self.placesmaker.push(new google.maps.Marker({
+      self.placesmarker.push(new google.maps.Marker({
         position: item.lating,
         map: map,
         title: item.name,
         label: item.name
       }));
     });
+    console.log('PM: ' + self.placesmarker());
 
-    self.filteredplacesmaker = ko.computed(function() {
+    self.filteredplacesmarker = ko.computed(function() {
       var filter = self.filter().toLowerCase();
       if (!filter || filter === '') {
-        return self.placesmaker();
+        return self.placesmarker();
       } else {
-        self.placesmaker().forEach(function(item) {
+        self.placesmarker().forEach(function(item) {
           if (RegExp(filter).test(item.title.toLowerCase())) {
             console.log('true filter:' + filter + ' item: ' + item.title);
             item.setVisible(true);
+            console.log(item);
           } else {
             console.log('false filter:' + filter + ' item: ' + item.title);
             item.setVisible(false);
@@ -121,48 +123,39 @@ var nm = function(state) {
       }
     });
 
+    $(document).ready(function() {
+      $.ajaxPrefilter("json script", function(options) {
+        options.crossDomain = true;
+      });
+      $.ajaxSetup({
+        dataType: "json"
+      });
+      $.ajax({
+        type: "GET",
+        //action=query&prop=extracts
+        url: "https://en.wikipedia.org/w/api.php?format=json&action=query&titles=Jimi_Hendrix|Nerobergbahn|Hessisches_Staatstheater_Wiesbaden|Wilhelmstraße_(Wiesbaden)&prop=extracts&exlimit=max&explaintext&exintro",
+        //url: "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=Jimi_Hendrix|Eddie_Van_Halen",
+        //url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
+        contentType: "application/json; charset=utf-8",
+        async: true,
+        dataType: "jsonp",
+        success: function(data, textStatus, jqXHR) {
+          console.log(data);
+          for (var k in data.query.pages) {
+            self.placesmarker().forEach(function(item) {
+              console.log('Marker: ' + item.title + ' wiki: ' + data.query.pages[k].title);
+            });
+          }
+        },
+        error: function(errorMessage) {
+          console.log(errorMessage);
+        }
+      });
+    });
   };
 
   ko.applyBindings(new locationsViewModel());
 
+
+
 };
-
-$(document).ready(function() {
-
-  $.ajaxPrefilter("json script", function(options) {
-    options.crossDomain = true;
-  });
-
-
-
-  $.ajaxSetup({
-    dataType: "json"
-  });
-  $.ajax({
-    type: "GET",
-
-    //action=query&prop=extracts
-    url: "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=Jimi_Hendrix|Eddie_Van_Halen",
-    //url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
-    contentType: "application/json; charset=utf-8",
-    async: true,
-    dataType: "jsonp",
-    success: function(data, textStatus, jqXHR) {
-
-      self.placesmaker.forEach(function {
-
-        var infowindow = new google.maps.InfoWindow({
-          content: contentString
-        });
-
-      });
-      //wiki = data;
-      //$('#Hendrix').append(data.query.pages[16095].extract);
-      //console.log('wiki: ' + wiki)
-    },
-    error: function(errorMessage) {}
-  });
-
-
-
-});
