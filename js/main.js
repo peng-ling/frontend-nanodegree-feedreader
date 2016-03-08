@@ -32,8 +32,8 @@ var nm = function(state) {
   var places = [{
     name: "Hessisches Staatstheater Wiesbaden",
     lating: {
-      lat: 50.082338,
-      lng: 88.2425596
+      lat: 50.0837223,
+      lng: 8.2437581
     },
     description: "Hessisches Staatstheater Wiesbaden",
     /*icon: '',*/
@@ -91,18 +91,20 @@ var nm = function(state) {
         label: item.name
       }));
     });
-    console.log('PM: ' + self.placesmarker());
+    //console.log('PM: ' + self.placesmarker());
 
     self.filteredplacesmarker = ko.computed(function() {
       var filter = self.filter().toLowerCase();
       if (!filter || filter === '') {
-        return self.placesmarker();
+        self.placesmarker().forEach(function(item) {
+          item.setVisible(true);
+        });
       } else {
         self.placesmarker().forEach(function(item) {
           if (RegExp(filter).test(item.title.toLowerCase())) {
             console.log('true filter:' + filter + ' item: ' + item.title);
             item.setVisible(true);
-            console.log(item);
+            //console.log(item);
           } else {
             console.log('false filter:' + filter + ' item: ' + item.title);
             item.setVisible(false);
@@ -141,17 +143,17 @@ var nm = function(state) {
         dataType: "jsonp",
         success: function(data, textStatus, jqXHR) {
           wiki = data;
-          console.log(data);
+          //console.log(data);
           if (data.query.pages != 'undefined') {
             for (var k in data.query.pages) {
               self.placesmarker().forEach(function(item) {
-                console.log('Marker: ' + item.title + ' wiki: ' + data.query.pages[k].title);
+                //console.log('Marker: ' + item.title + ' wiki: ' + data.query.pages[k].title);
                 if (item.title == data.query.pages[k].title) {
                   var infowindow = new google.maps.InfoWindow({
                     content: data.query.pages[k].extract
                   });
-                  console.log('INFO:' + infowindow);
-                  console.log('Search hit Marker: ' + item.title + ' wiki: ' + data.query.pages[k].extract);
+                  //console.log('INFO:' + infowindow);
+                  //console.log('Search hit Marker: ' + item.title + ' wiki: ' + data.query.pages[k].extract);
                   google.maps.event.addListener(item, 'click', function() {
                     //infoWindow.setContent(data.query.pages[k].extract)
                     infowindow.open(map, this);
@@ -162,7 +164,7 @@ var nm = function(state) {
           }
         },
         error: function(errorMessage) {
-          console.log(errorMessage);
+          //console.log(errorMessage);
         }
       });
     });
