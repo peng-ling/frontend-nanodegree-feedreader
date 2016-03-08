@@ -30,35 +30,35 @@ var nm = function(state) {
   this.state = state;
 
   var places = [{
-    name: "Ristorante Pizzeria Da Balbi",
+    name: "Hessisches Staatstheater Wiesbaden",
     lating: {
-      lat: 50.0720994,
-      lng: 8.2317455
+      lat: 50.082338,
+      lng: 88.2425596
     },
-    description: "great italian food",
+    description: "Hessisches Staatstheater Wiesbaden",
     /*icon: '',*/
     visible: true,
-    wikipageid: 26496842
+    wikipagetitle: "Hessisches Staatstheater Wiesbaden"
   }, {
-    name: "Restaurant Mykonos",
+    name: "Wilhelmstraße (Wiesbaden)",
     lating: {
-      lat: 50.0723748,
-      lng: 8.2292886
+      lat: 50.082338,
+      lng: 8.2425596
     },
-    description: "great greek food",
+    description: "Wilhelmstraße (Wiesbaden)",
     /*icon: '',*/
     visible: true,
-    wikipageid: 26496842
+    wikipagetitle: "Wilhelmstraße_(Wiesbaden)"
   }, {
-    name: "Asso",
+    name: "Biebrich Palace",
     lating: {
-      lat: 50.0723748,
-      lng: 8.2592886
+      lat: 50.0373451,
+      lng: 8.2319409
     },
-    description: "Asso",
+    description: "Biebrich Palace",
     /*icon: '',*/
     visible: true,
-    wikipageid: 16095
+    wikipagetitle: "Biebrich_Palace"
   }, {
     name: "Nerobergbahn",
     lating: {
@@ -68,7 +68,7 @@ var nm = function(state) {
     description: "Nerobergbahn",
     /*icon: '',*/
     visible: true,
-    wikipageid: 9672198
+    wikipagetitle: "Nerobergbahn"
   }];
 
   //intializing marker array
@@ -133,18 +133,32 @@ var nm = function(state) {
       $.ajax({
         type: "GET",
         //action=query&prop=extracts
-        url: "https://en.wikipedia.org/w/api.php?format=json&action=query&titles=Jimi_Hendrix|Nerobergbahn|Hessisches_Staatstheater_Wiesbaden|Wilhelmstraße_(Wiesbaden)&prop=extracts&exlimit=max&explaintext&exintro",
+        url: "https://en.wikipedia.org/w/api.php?format=json&action=query&titles=Biebrich_Palace|Nerobergbahn|Hessisches_Staatstheater_Wiesbaden|Wilhelmstraße_(Wiesbaden)&prop=extracts&exlimit=max&explaintext&exintro",
         //url: "https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&titles=Jimi_Hendrix|Eddie_Van_Halen",
         //url: "https://crossorigin.me/https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=Jimi_Hendrix",
         contentType: "application/json; charset=utf-8",
         async: true,
         dataType: "jsonp",
         success: function(data, textStatus, jqXHR) {
+          wiki = data;
           console.log(data);
-          for (var k in data.query.pages) {
-            self.placesmarker().forEach(function(item) {
-              console.log('Marker: ' + item.title + ' wiki: ' + data.query.pages[k].title);
-            });
+          if (data.query.pages != 'undefined') {
+            for (var k in data.query.pages) {
+              self.placesmarker().forEach(function(item) {
+                console.log('Marker: ' + item.title + ' wiki: ' + data.query.pages[k].title);
+                if (item.title == data.query.pages[k].title) {
+                  var infowindow = new google.maps.InfoWindow({
+                    content: data.query.pages[k].extract
+                  });
+                  console.log('INFO:' + infowindow);
+                  console.log('Search hit Marker: ' + item.title + ' wiki: ' + data.query.pages[k].extract);
+                  google.maps.event.addListener(item, 'click', function() {
+                    //infoWindow.setContent(data.query.pages[k].extract)
+                    infowindow.open(map, this);
+                  });
+                }
+              });
+            }
           }
         },
         error: function(errorMessage) {
@@ -155,7 +169,5 @@ var nm = function(state) {
   };
 
   ko.applyBindings(new locationsViewModel());
-
-
 
 };
