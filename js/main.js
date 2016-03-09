@@ -1,5 +1,6 @@
 var map;
 var wiki;
+var weather;
 
 var callbackGM = function() {
 
@@ -183,6 +184,21 @@ var nm = function(state) {
       });
     });
   };
+
+  //weather api goes here
+  $.ajax({
+    type: "GET",
+    url: "http://api.openweathermap.org/data/2.5/weather?q=wiesbaden&appid=44db6a862fba0b067b1930da0d769e98",
+    contentType: "application/json; charset=utf-8",
+    async: true,
+    dataType: "jsonp",
+    success: function(wData, textStatus, jqXHR) {
+
+      var icon = wData.weather[0].icon;
+
+    },
+    error: function(errorMessage) {}
+  });
 
   ko.applyBindings(new locationsViewModel());
 
