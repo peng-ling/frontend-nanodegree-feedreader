@@ -111,7 +111,7 @@ var nm = function(state) {
           }
         });
       }
-      console.log('------------------');
+      //console.log('------------------');
     });
 
     self.filterLocations = ko.computed(function() {
@@ -124,6 +124,19 @@ var nm = function(state) {
         });
       }
     });
+
+    //click on places list item invokes this function
+    self.setPlace = function(pItem) {
+      console.log(pItem);
+      self.placesmarker().forEach(function(mItem){
+        if(pItem.name == mItem.title){
+          mItem.setAnimation(google.maps.Animation.BOUNCE);
+          setTimeout(function () {
+    mItem.setAnimation(null);
+}, 700);
+        }
+      });
+    };
 
     $(document).ready(function() {
       $.ajaxPrefilter("json script", function(options) {
