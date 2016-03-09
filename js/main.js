@@ -128,12 +128,12 @@ var nm = function(state) {
     //click on places list item invokes this function
     self.setPlace = function(pItem) {
       console.log(pItem);
-      self.placesmarker().forEach(function(mItem){
-        if(pItem.name == mItem.title){
+      self.placesmarker().forEach(function(mItem) {
+        if (pItem.name == mItem.title) {
           mItem.setAnimation(google.maps.Animation.BOUNCE);
-          setTimeout(function () {
-    mItem.setAnimation(null);
-}, 700);
+          setTimeout(function() {
+            mItem.setAnimation(null);
+          }, 700);
         }
       });
     };
@@ -175,9 +175,10 @@ var nm = function(state) {
               });
             }
           }
+          $(".navbar-text").append("Click on the marker to reveal some wikipedia information!");
         },
         error: function(errorMessage) {
-          //console.log(errorMessage);
+          $(".navbar-text").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
         }
       });
     });

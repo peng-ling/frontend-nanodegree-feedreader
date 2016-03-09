@@ -1,25 +1,24 @@
 <html lang="en">
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-  <meta name="description" content="Udacity Web Frontend Developer nano degree P5 Neighborhood Map">
-  <meta name="author" content="Paul Engling">
-  <link rel="icon" href="img/paul_icon.ico">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="Udacity Web Frontend Developer nano degree P5 Neighborhood Map">
+    <meta name="author" content="Paul Engling">
+    <link rel="icon" href="img/paul_icon.ico">
 
-  <title>Pauls Map</title>
+    <title>Pauls Map</title>
 
-  <link href="css/bootstrap.css" rel="stylesheet"></link>
-  <link href="css/custom.css" rel="stylesheet"></link>
-  <!-- without this style, google map will not show up-->
-  <style type="text/css">
-  </style>
+    <link href="css/bootstrap.css" rel="stylesheet"></link>
+    <link href="css/custom.css" rel="stylesheet"></link>
+    <!-- without this style, google map will not show up-->
+    <style type="text/css"></style>
     <!--onerror="googleError()"-->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=callbackGM"></script>
-  <script src="js/jquery.js"></script>
-  <script src="js/knockout.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=callbackGM"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/knockout.js"></script>
   </script>
 
 </head>
@@ -31,6 +30,9 @@
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <a class="navbar-brand">Pauls Map</a>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="navbar-text navbar-right"></ul>
       </div>
     </div>
     <!-- /.container-fluid -->
@@ -49,8 +51,7 @@
         </ul>
       </div>
       <div class="col-md-8 gmap">
-        <div class="gmap" id="map">
-        </div>
+        <div class="gmap" id="map"></div>
       </div>
     </div>
   </div>
