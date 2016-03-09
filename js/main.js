@@ -14,14 +14,14 @@ var callbackGM = function() {
 var initMap = function() {
 
   var myLatLng = {
-    lat: 50.0716683,
-    lng: 8.2309231
+    lat: 50.0653546,
+    lng: 8.2341895
   };
 
   map = new google.maps.Map(document.getElementById('map'), {
     center: myLatLng,
     scrollwheel: false,
-    zoom: 12
+    zoom: 13
   });
 };
 
