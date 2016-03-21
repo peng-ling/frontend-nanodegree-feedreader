@@ -1,6 +1,7 @@
 var map;
 var wiki;
 var weather;
+var weatherAppendString;
 
 var callbackGM = function() {
 
@@ -176,10 +177,10 @@ var nm = function(state) {
               });
             }
           }
-          $(".navbar-text").append("Click on the marker to reveal some wikipedia information!");
+          $("#mapInformation").append("Click on the marker to reveal some wikipedia information!");
         },
         error: function(errorMessage) {
-          $(".navbar-text").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
+          $("#mapInformation").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
         }
       });
     });
@@ -188,16 +189,29 @@ var nm = function(state) {
   //weather api goes here
   $.ajax({
     type: "GET",
-    url: "http://api.openweathermap.org/data/2.5/weather?q=wiesbaden&appid=44db6a862fba0b067b1930da0d769e98",
+    url: "http://api.openweathermap.org/data/2.5/weather?q=wiesbaden&appid=3f099c8df131401cc9914c26a1abe703",
     contentType: "application/json; charset=utf-8",
     async: true,
     dataType: "jsonp",
     success: function(wData, textStatus, jqXHR) {
 
+      weather = wData;
+
       var icon = wData.weather[0].icon;
 
+      var weatherIconUrl = 'http://openweathermap.org/img/w/';
+
+      var fullWeatherIconUrl = weatherIconUrl + icon + '.png';
+
+      weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
+
+      $("#weatherIcon").append(weatherAppendString);
+
+
     },
-    error: function(errorMessage) {}
+    error: function(errorMessage) {
+      console.log(errorMessage);
+    }
   });
 
   ko.applyBindings(new locationsViewModel());
