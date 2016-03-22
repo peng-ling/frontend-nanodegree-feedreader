@@ -18,11 +18,15 @@
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand">Pauls Map</a>
+        <a class="navbar-brand">Pauls Wiesbaden Map</a>
       </div>
       <div class="navbar-collapse collapse">
-        <ul class="navbar-text navbar-right" id="mapInformation"></ul>
+        <ul class="navbar-text navbar-right List" id="mapInformation"></ul>
         <ul class="navbar-text navbar" id="weatherIcon"></ul>
+        <ul class="navbar-text navbar">
+          <li class="list" id="weatherDescription"></li>
+          <li class="list" id="temperatur"></li>
+        </ul>
       </div>
     </div>
   </nav>
@@ -47,9 +51,9 @@
   </div>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="js/ie10-viewport-bug-workaround.js"></script>
-  <script src="js/main.js"></script>
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=callbackGM"></script>
-  <script src="js/jquery.js"></script>
   <script src="js/knockout.js"></script>
+  <script src="js/jquery.js"></script>
+  <script src="js/main.js"></script>
+  <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbgpK8qTLTx2cyvAHJFS2zRO0DTa64M74&callback=callbackGM" onerror="callbackGM()"></script>
 </body>
 </html>
