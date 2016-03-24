@@ -1,18 +1,9 @@
-var map;
-var wiki;
-var weather;
-var weatherAppendString;
-
 var googleError = function() {
   $("#map").append('Unfortunately google map could not be loaded, try reloading the page.');
-
 };
-
-
-
+//callbck function invoked by google maps api call
 var callbackGM = function() {
-  console.log(typeof google);
-
+  var map;
   if (typeof google === 'undefined') {
     nm('error');
   } else {
@@ -20,26 +11,25 @@ var callbackGM = function() {
     nm('ok');
   }
 };
-
+//initialize google map
 var initMap = function() {
-
   var myLatLng = {
     lat: 50.0653546,
     lng: 8.2341895
   };
-
+  //create new google map object
   map = new google.maps.Map(document.getElementById('map'), {
     center: myLatLng,
     scrollwheel: false,
     zoom: 13
   });
 };
-
+//function for populating map and invoking ko view model
 var nm = function(state) {
   var wikiTitelsForUrl = '';
-
+  //if google map loaded properly start populating map with markers, markers info window with wikipedia content etc.
   if (state === 'ok') {
-
+    //places json wikipagetitle is used for wikimedia api request
     var places = [{
       name: "Hessisches Staatstheater Wiesbaden",
       lating: {
@@ -47,8 +37,6 @@ var nm = function(state) {
         lng: 8.2437581
       },
       description: "Hessisches Staatstheater Wiesbaden",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Hessisches Staatstheater Wiesbaden"
     }, {
       name: "Wilhelmstraße",
@@ -57,8 +45,6 @@ var nm = function(state) {
         lng: 8.2425596
       },
       description: "Wilhelmstraße",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Wilhelmstraße (Wiesbaden)"
     }, {
       name: "Biebrich Palace",
@@ -67,8 +53,6 @@ var nm = function(state) {
         lng: 8.2319409
       },
       description: "Biebrich Palace",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Biebrich Palace"
     }, {
       name: "Nerobergbahn",
@@ -77,8 +61,6 @@ var nm = function(state) {
         lng: 8.2210174
       },
       description: "Nerobergbahn",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Nerobergbahn"
     }, {
       name: "Wiesbaden Hauptbahnhof",
@@ -87,8 +69,6 @@ var nm = function(state) {
         lng: 8.2412096
       },
       description: "Wiesbaden Main Station",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Wiesbaden Hauptbahnhof"
     }, {
       name: "St Elizabeth's Church",
@@ -97,8 +77,6 @@ var nm = function(state) {
         lng: 8.2325569
       },
       description: "St Elizabeth's Church",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "St Elizabeth's Church, Wiesbaden"
     }, {
       name: "Kochbrunnen",
@@ -107,8 +85,6 @@ var nm = function(state) {
         lng: 8.239679
       },
       description: "Kochbrunnen",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Kochbrunnen"
     }, {
       name: "Opelbad",
@@ -117,13 +93,10 @@ var nm = function(state) {
         lng: 8.2299419
       },
       description: "Opelbad",
-      /*icon: '',*/
-      visible: true,
       wikipagetitle: "Opelbad"
     }];
 
     //wikimedia api titles string concatenation
-    //Opelbad
     places.forEach(function(item, index) {
       if (places.length - index - 1 === 0) {
         wikiTitelsForUrl = wikiTitelsForUrl + item.wikipagetitle;
@@ -132,7 +105,7 @@ var nm = function(state) {
       }
     });
 
-    //intializing marker array
+    // knockout view model
     this.locationsViewModel = function() {
 
       var self = this;
@@ -142,7 +115,7 @@ var nm = function(state) {
       self.filter = ko.observable('');
 
       self.placesmarker = ko.observableArray([]);
-
+      // creating maps markers
       places.forEach(function(item) {
         self.placesmarker.push(new google.maps.Marker({
           position: item.lating,
@@ -193,7 +166,7 @@ var nm = function(state) {
           }
         });
       };
-
+      // jquery ajax call for wikipedia
       $(document).ready(function() {
         $.ajaxPrefilter("json script", function(options) {
           options.crossDomain = true;
@@ -208,7 +181,7 @@ var nm = function(state) {
           async: true,
           dataType: "jsonp",
           success: function(data, textStatus, jqXHR) {
-            wiki = data;
+            // in case api calll was sucsessfull populate marker info window with wikipedia information
             if (data.query.pages != 'undefined') {
               for (var k in data.query.pages) {
                 self.placesmarker().forEach(function(item) {
@@ -224,22 +197,24 @@ var nm = function(state) {
                 });
               }
             }
+            // add tip how to see wikipedia information
             $("#mapInformation").append("Click on the marker to reveal some wikipedia information!");
           },
           error: function(errorMessage) {
+            // in case of an error tell user to reload
             $("#mapInformation").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
           }
         });
       });
     };
     ko.applyBindings(new locationsViewModel());
+    //if google map did not load properly, tell vivistor to reload.
   } else {
-    console.log('error');
     $("#map").append('Unfortunately google map could not be loaded, try reloading the page.');
   }
 };
 
-//weather api goes here
+//open weather api data will be loaded here
 $.ajax({
   type: "GET",
   url: "http://api.openweathermap.org/data/2.5/weather?q=wiesbaden&appid=3f099c8df131401cc9914c26a1abe703",
@@ -254,7 +229,7 @@ $.ajax({
     var fullWeatherIconUrl = weatherIconUrl + icon + '.png';
     var celsius = Math.round((wData.main.temp - 273.15));
 
-    weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
+    var weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
 
     $("#weatherIcon").append(weatherAppendString);
     $("#temperatur").append(celsius + ' °C');

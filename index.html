@@ -3,7 +3,6 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <meta name="description" content="Udacity Web Frontend Developer nano degree P5 Neighborhood Map">
     <meta name="author" content="Paul Engling">
     <link rel="icon" href="img/paul_icon.ico">
@@ -16,12 +15,11 @@
 <body>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
         <a class="navbar-brand">Pauls Wiesbaden Map</a>
       </div>
-      <div class="navbar-collapse collapse">
-        <ul class="navbar-text navbar-right List" id="mapInformation"></ul>
+      <div class="nav navbar-nav">
+        <ul class="navbar-text navbar-right" id="mapInformation"></ul>
         <ul class="navbar-text navbar" id="weatherIcon"></ul>
         <ul class="navbar-text navbar">
           <li class="list" id="weatherDescription"></li>
@@ -44,12 +42,11 @@
           </div>
         </div>
       </div>
-      <div class="col-md-8 gmap">
+      <div class="col-lg-8 gmap">
         <div class="gmap" id="map"></div>
       </div>
     </div>
   </div>
-  <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="js/ie10-viewport-bug-workaround.js"></script>
   <script src="js/knockout.js"></script>
   <script src="js/jquery.js"></script>
