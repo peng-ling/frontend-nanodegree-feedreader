@@ -174,37 +174,37 @@ var nm = function(state) {
         $.ajaxSetup({
           dataType: "json"
         });
-        $.ajax({
+        var wikiMediaReq = $.ajax({
           type: "GET",
           url: "https://en.wikipedia.org/w/api.php?format=json&action=query&titles=" + wikiTitelsForUrl + "&prop=extracts&exlimit=max&explaintext&exintro",
           contentType: "application/json; charset=utf-8",
           async: true,
-          dataType: "jsonp",
-          success: function(data, textStatus, jqXHR) {
-            // in case api calll was sucsessfull populate marker info window with wikipedia information
-            if (data.query.pages != 'undefined') {
-              for (var k in data.query.pages) {
-                self.placesmarker().forEach(function(item) {
-                  // label = wikipagetitle
-                  if (item.label == data.query.pages[k].title) {
-                    var infowindow = new google.maps.InfoWindow({
-                      content: data.query.pages[k].extract
-                    });
-                    google.maps.event.addListener(item, 'click', function() {
-                      infowindow.open(map, this);
-                    });
-                  }
-                });
-              }
-            }
-            // add tip how to see wikipedia information
-            $("#mapInformation").append("Click on the marker to reveal some wikipedia information!");
-          },
-          error: function(errorMessage) {
-            // in case of an error tell user to reload
-            $("#mapInformation").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
-          }
+          dataType: "jsonp"
         });
+        wikiMediaReq.done(function(data, textStatus, jqXHR) {
+          // in case api calll was sucsessfull populate marker info window with wikipedia information
+          if (data.query.pages != 'undefined') {
+            for (var k in data.query.pages) {
+              self.placesmarker().forEach(function(item) {
+                // label = wikipagetitle
+                if (item.label == data.query.pages[k].title) {
+                  var infowindow = new google.maps.InfoWindow({
+                    content: data.query.pages[k].extract
+                  });
+                  google.maps.event.addListener(item, 'click', function() {
+                    infowindow.open(map, this);
+                  });
+                }
+              });
+            }
+          }
+          // add tip how to see wikipedia information
+          $("#mapInformation").append("Click on the marker to reveal some wikipedia information!");
+        });
+        wikiMediaReq.fail(function() {
+          $("#mapInformation").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
+        });
+
       });
     };
     ko.applyBindings(new locationsViewModel());
@@ -215,28 +215,30 @@ var nm = function(state) {
 };
 
 //open weather api data will be loaded here
-$.ajax({
+var openWeatherReq = $.ajax({
   type: "GET",
   url: "http://api.openweathermap.org/data/2.5/weather?q=wiesbaden&appid=3f099c8df131401cc9914c26a1abe703",
   contentType: "application/json; charset=utf-8",
   async: true,
   dataType: "jsonp",
-  success: function(wData, textStatus, jqXHR) {
-
-    var icon = wData.weather[0].icon;
-    var weatherDescription = wData.weather[0].description;
-    var weatherIconUrl = 'http://openweathermap.org/img/w/';
-    var fullWeatherIconUrl = weatherIconUrl + icon + '.png';
-    var celsius = Math.round((wData.main.temp - 273.15));
-
-    var weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
-
-    $("#weatherIcon").append(weatherAppendString);
-    $("#temperatur").append(celsius + ' °C');
-    $("#weatherDescription").append(weatherDescription);
-  },
   error: function(errorMessage) {
-    $("#weatherIcon").append('Unfortunately weather information <br> could not be loaded, try reloading the page.');
+
 
   }
+});
+openWeatherReq.done(function(wData) {
+  var icon = wData.weather[0].icon;
+  var weatherDescription = wData.weather[0].description;
+  var weatherIconUrl = 'http://openweathermap.org/img/w/';
+  var fullWeatherIconUrl = weatherIconUrl + icon + '.png';
+  var celsius = Math.round((wData.main.temp - 273.15));
+
+  var weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
+
+  $("#weatherIcon").append(weatherAppendString);
+  $("#temperatur").append(celsius + ' °C');
+  $("#weatherDescription").append(weatherDescription);
+});
+openWeatherReq.fail(function() {
+  $("#weatherIcon").append('Unfortunately weather information <br> could not be loaded, try reloading the page.');
 });
