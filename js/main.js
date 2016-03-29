@@ -72,7 +72,11 @@ function locationsViewModel() {
   self.Locations = ko.observableArray(places);
   self.filter = ko.observable('');
   self.placesmarker = ko.observableArray([]);
-  self.weatherIcon = ko.observable('Bert');
+  self.weatherIcon = ko.observable();
+  self.temperatur = ko.observable();
+  self.weatherDescription = ko.observable();
+  self.mapInformation = ko.observable();
+  self.map = ko.observable();
 
   // creating maps markers and pupulating placesmarker
   places.forEach(function(item) {
@@ -128,7 +132,7 @@ function locationsViewModel() {
 }
 //in case google maps api fails this function executes
 var googleError = function() {
-  $("#map").append('Unfortunately google map could not be loaded, try reloading the page.');
+  koViewModel.mapInformation('Unfortunately google map could not be loaded, try reloading the page.');
 };
 //callbck function invoked by google maps api call
 var callbackGM = function() {
@@ -205,16 +209,16 @@ var nm = function(state) {
           }
         }
         // add tip how to see wikipedia information
-        $("#mapInformation").append("Click on the marker to reveal some wikipedia information!");
+        koViewModel.mapInformation("Click on the marker to reveal some wikipedia information!");
       });
       wikiMediaReq.fail(function() {
-        $("#mapInformation").append("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
+        koViewModel.mapInformation("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
       });
 
     });
     //if google map did not load properly, tell vivistor to reload.
   } else {
-    $("#map").append('Unfortunately google map could not be loaded, try reloading the page.');
+    koViewModel.map('Unfortunately google map could not be loaded, try reloading the page.');
   }
 };
 
@@ -235,12 +239,11 @@ openWeatherReq.done(function(wData) {
   var celsius = Math.round((wData.main.temp - 273.15));
   var weatherAppendString = '<img src="' + fullWeatherIconUrl + '" alt="weather icon">';
 
-  weatherIcon = weatherAppendString;
+  koViewModel.weatherIcon(weatherAppendString);
+  koViewModel.temperatur(celsius + ' °C');
+  koViewModel.weatherDescription(weatherDescription);
 
-  //$("#weatherIcon").append(weatherAppendString);
-  $("#temperatur").append(celsius + ' °C');
-  $("#weatherDescription").append(weatherDescription);
 });
 openWeatherReq.fail(function() {
-  $("#weatherIcon").append('Unfortunately weather information <br> could not be loaded, try reloading the page.');
+  koViewModel.weatherIcon('<div>Unfortunately weather information <br> could not be loaded, try reloading the page.</div>');
 });
