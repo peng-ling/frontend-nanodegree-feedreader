@@ -123,6 +123,7 @@ function locationsViewModel() {
     self.placesmarker().forEach(function(mItem) {
       if (pItem.name == mItem.title) {
         mItem.setAnimation(google.maps.Animation.BOUNCE);
+        infowindow.open(map, mItem);
         setTimeout(function() {
           mItem.setAnimation(null);
         }, 700);
@@ -172,10 +173,6 @@ var nm = function(state) {
       }
     });
 
-    //knockout view model intitialization
-    koViewModel = (new locationsViewModel());
-    ko.applyBindings(koViewModel);
-
     // jquery ajax call for wikipedia
     $(document).ready(function() {
       $.ajaxPrefilter("json script", function(options) {
@@ -198,11 +195,15 @@ var nm = function(state) {
             koViewModel.placesmarker().forEach(function(item) {
               // label = wikipagetitle
               if (item.label == data.query.pages[k].title) {
-                var infowindow = new google.maps.InfoWindow({
+                this.infowindow = new google.maps.InfoWindow({
                   content: data.query.pages[k].extract
                 });
                 google.maps.event.addListener(item, 'click', function() {
                   infowindow.open(map, this);
+                  item.setAnimation(google.maps.Animation.BOUNCE);
+                  setTimeout(function() {
+                    item.setAnimation(null);
+                  }, 700);
                 });
               }
             });
@@ -217,7 +218,12 @@ var nm = function(state) {
 
     });
     //if google map did not load properly, tell vivistor to reload.
+    //knockout view model intitialization
+    koViewModel = (new locationsViewModel());
+    ko.applyBindings(koViewModel);
   } else {
+    koViewModel = (new locationsViewModel());
+    ko.applyBindings(koViewModel);
     koViewModel.map('Unfortunately google map could not be loaded, try reloading the page.');
   }
 };
