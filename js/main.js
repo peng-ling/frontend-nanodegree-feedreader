@@ -101,6 +101,7 @@ function locationsViewModel() {
           item.setVisible(true);
         } else {
           item.setVisible(false);
+          item.infowindow.close();
         }
       });
     }
@@ -123,10 +124,12 @@ function locationsViewModel() {
     self.placesmarker().forEach(function(mItem) {
       if (pItem.name == mItem.title) {
         mItem.setAnimation(google.maps.Animation.BOUNCE);
-        infowindow.open(map, mItem);
+        mItem.infowindow.open(map, mItem);
         setTimeout(function() {
           mItem.setAnimation(null);
         }, 700);
+      } else {
+        mItem.infowindow.close();
       }
     });
   };
@@ -195,15 +198,22 @@ var nm = function(state) {
             koViewModel.placesmarker().forEach(function(item) {
               // label = wikipagetitle
               if (item.label == data.query.pages[k].title) {
-                this.infowindow = new google.maps.InfoWindow({
+                item.infowindow = new google.maps.InfoWindow({
                   content: data.query.pages[k].extract
                 });
+                // add click event to each marker
                 google.maps.event.addListener(item, 'click', function() {
-                  infowindow.open(map, this);
+                  item.infowindow.open(map, item);
                   item.setAnimation(google.maps.Animation.BOUNCE);
                   setTimeout(function() {
                     item.setAnimation(null);
                   }, 700);
+                  // when one info window opens close all other info windows
+                  koViewModel.placesmarker().forEach(function(pItem) {
+                    if (item.label !== pItem.label) {
+                      pItem.infowindow.close();
+                    }
+                  });
                 });
               }
             });
