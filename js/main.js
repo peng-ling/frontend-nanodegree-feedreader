@@ -1,5 +1,6 @@
 var koViewModel;
 
+//json with places in wiesbaden wich will show up on the map
 var places = [{
   name: "Hessisches Staatstheater Wiesbaden",
   lating: {
@@ -66,7 +67,19 @@ var places = [{
   wikipagetitle: "Opelbad"
 }];
 
+
+// knockout.js viewmodel
 function locationsViewModel() {
+
+  var markerImage = {
+    url: 'img/Wappen_Wiesbaden.svg',
+    // This marker is 20 pixels wide by 32 pixels high.
+    scaledSize: new google.maps.Size(28, 30),
+    // The origin for this image is (0, 0).
+    origin: new google.maps.Point(0, 0),
+    // The anchor for this image is the base of the flagpole at (0, 32).
+    anchor: new google.maps.Point(0, 32)
+  };
 
   var self = this;
   self.Locations = ko.observableArray(places);
@@ -84,7 +97,8 @@ function locationsViewModel() {
       position: item.lating,
       map: map,
       title: item.name,
-      label: item.wikipagetitle
+      label: item.wikipagetitle,
+      icon: markerImage
     }));
   });
 
@@ -222,16 +236,17 @@ var nm = function(state) {
         // add tip how to see wikipedia information
         koViewModel.mapInformation("Click on the marker to reveal some wikipedia information!");
       });
+      //in case wikimedia api failed this gets executed
       wikiMediaReq.fail(function() {
         koViewModel.mapInformation("Unfortunately wikipedia information could not be loaded, try refreshing the page!");
       });
 
     });
-    //if google map did not load properly, tell vivistor to reload.
     //knockout view model intitialization
     koViewModel = (new locationsViewModel());
     ko.applyBindings(koViewModel);
   } else {
+    //if google map did not load properly, tell vivistor to reload.
     koViewModel = (new locationsViewModel());
     ko.applyBindings(koViewModel);
     koViewModel.map('Unfortunately google map could not be loaded, try reloading the page.');
@@ -247,6 +262,7 @@ var openWeatherReq = $.ajax({
   dataType: "jsonp",
   error: function(errorMessage) {}
 });
+// executes in case of sucsessfull open weather api request
 openWeatherReq.done(function(wData) {
   var icon = wData.weather[0].icon;
   var weatherDescription = wData.weather[0].description;
@@ -260,6 +276,7 @@ openWeatherReq.done(function(wData) {
   koViewModel.weatherDescription(weatherDescription);
 
 });
+// executes in case of unsucsessfull open weather api request
 openWeatherReq.fail(function() {
   koViewModel.weatherIcon('<div>Unfortunately weather information <br> could not be loaded, try reloading the page.</div>');
 });
