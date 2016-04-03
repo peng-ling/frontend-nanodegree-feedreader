@@ -97,7 +97,10 @@ function locationsViewModel() {
       position: item.lating,
       map: map,
       title: item.name,
-      label: item.wikipagetitle,
+      label: {
+        text: item.wikipagetitle,
+        color: 'yellow'
+      },
       icon: markerImage
     }));
   });
@@ -211,7 +214,7 @@ var nm = function(state) {
           for (var k in data.query.pages) {
             koViewModel.placesmarker().forEach(function(item) {
               // label = wikipagetitle
-              if (item.label == data.query.pages[k].title) {
+              if (item.label.text == data.query.pages[k].title) {
                 item.infowindow = new google.maps.InfoWindow({
                   content: data.query.pages[k].extract
                 });
@@ -224,7 +227,7 @@ var nm = function(state) {
                   }, 700);
                   // when one info window opens close all other info windows
                   koViewModel.placesmarker().forEach(function(pItem) {
-                    if (item.label !== pItem.label) {
+                    if (item.label.text !== pItem.label.text) {
                       pItem.infowindow.close();
                     }
                   });
