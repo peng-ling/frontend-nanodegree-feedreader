@@ -99,7 +99,7 @@ function locationsViewModel() {
       title: item.name,
       label: {
         text: item.wikipagetitle,
-        color: 'yellow'
+        color: '#fcdd09'
       },
       icon: markerImage
     }));
