@@ -33,7 +33,7 @@ $(function() {
 
   });
 
-  /* TODO: Write a test that loops through each feed
+  /* Test that loops through each feed
    * in the allFeeds object and ensures it has a URL defined
    * and that the URL is not empty.
    */
@@ -51,7 +51,7 @@ $(function() {
     });
   });
 
-  /* TODO: Write a test that loops through each feed
+  /* Test that loops through each feed
    * in the allFeeds object and ensures it has a name defined
    * and that the name is not empty.
    */
@@ -70,22 +70,18 @@ $(function() {
     });
   });
 
-  /* TODO: Write a new test suite named "The menu" */
+  /* Test suite that menu functionality */
   describe('The menu', function() {
 
-    /* TODO: Write a test that ensures the menu element is
-     * hidden by default. You'll have to analyze the HTML and
-     * the CSS to determine how we're performing the
-     * hiding/showing of the menu element.
-     */
+    /* Test that ensures the menu element is hidden by default */
 
     it('menu element is hidden by default', function() {
       expect($('.slide-menu').css('transform')).toBe('matrix(1, 0, 0, 1, -192, 0)');
     });
 
-    /* TODO: Write a test that ensures the menu changes
+    /* Test that ensures the menu changes
      * visibility when the menu icon is clicked. This test
-     * should have two expectations: does the menu display when
+     * has two expectations: does the menu display when
      * clicked and does it hide when clicked again.
      */
 
@@ -100,14 +96,13 @@ $(function() {
     });
   });
 
-  /* TODO: Write a new test suite named "Initial Entries" */
+  /* Test suite that checks for Initial Entries */
   describe('Initial Entries', function() {
 
-    /* TODO: Write a test that ensures when the loadFeed
+    /* Test that ensures when the loadFeed
      * function is called and completes its work, there is at least
      * a single .entry element within the .feed container.
-     * Remember, loadFeed() is asynchronous so this test will require
-     * the use of Jasmine's beforeEach and asynchronous done() function.
+     * Makes use of Jasmine's beforeEach and asynchronous done() function.
      */
 
     var originalTimeout;
@@ -117,29 +112,34 @@ $(function() {
     });
 
     it('after load feed there should be at least one entry', function(done) {
-      expect($('.feed').find('.entry').length).not.toBe(0);
+      expect($('.feed .entry').length).not.toBe(0);
       done();
     });
 
   });
 
-  /* TODO: Write a new test suite named "New Feed Selection"*/
+  /* Test suite named checks for New Feed Selection working properly*/
+
   describe('New Feed Selection', function() {
 
-    /* TODO: Write a test that ensures when a new feed is loaded
+    /* Test that ensures when a new feed is loaded
      * by the loadFeed function that the content actually changes.
-     * Remember, loadFeed() is asynchronous.
+     * Makes use of Jasmine's beforeEach and asynchronous done() function.
      */
+    var originalTimeout;
 
     beforeEach(function(done) {
+
       loadFeed(0, done);
     });
 
-    var oldFeedContent = $('.feed').find('.entry').text();
-
     it('when a new feed is loaded the content actually changes', function(done) {
-      loadFeed(1, done);
-      expect($('.feed').find('.entry').text()).not.toBe(oldFeedContent);
+      var oldFeedContent = $('.feed').find('.entry').text();
+      loadFeed(1, function() {
+        expect($('.feed').find('.entry').text()).not.toBe(oldFeedContent);
+        done();
+      });
+
     });
 
   });
